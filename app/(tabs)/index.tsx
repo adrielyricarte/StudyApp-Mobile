@@ -1,98 +1,230 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import * as Haptics from 'expo-haptics';
+import { useState } from 'react';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { router } from 'expo-router';
 
-export default function HomeScreen() {
+export default function TelaInicial() {
+  const [sessoesConcluidas, setSessoesConcluidas] = useState(0);
+
+  const iniciarEstudo = async () => {
+    setSessoesConcluidas(sessoesConcluidas + 1);
+
+    await Haptics.impactAsync(
+      Haptics.ImpactFeedbackStyle.Medium
+    );
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView style={estilos.container}>
+      <View style={estilos.cabecalho}>
+        <Text style={estilos.logo}>STUDYAPP</Text>
+        <Text style={estilos.subtitulo}>
+          Seu espaço de aprendizagem
+        </Text>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <View style={estilos.boasVindas}>
+        <Text style={estilos.titulo}>
+          Olá, estudante! 👋
+        </Text>
+        <Text style={estilos.descricao}>
+          Continue aprendendo e alcance seus objetivos.
+        </Text>
+      </View>
+
+      <View style={estilos.cartao}>
+        <Text style={estilos.tituloCartao}>
+          📚 Seu progresso
+        </Text>
+
+        <Text style={estilos.numero}>
+          {sessoesConcluidas}
+        </Text>
+
+        <Text style={estilos.descricao}>
+          Sessões de estudo iniciadas nesta visita
+        </Text>
+      </View>
+
+      <Text style={estilos.tituloSecao}>
+        Áreas de estudo
+      </Text>
+
+      
+<Pressable
+  style={estilos.materia}
+  onPress={() =>
+    router.push({
+      pathname: '/materia/[nome]',
+      params: { nome: 'tecnologia' },
+    })
+  }
+>
+  <Text style={estilos.icone}>💻</Text>
+  <View>
+    <Text style={estilos.nomeMateria}>Tecnologia</Text>
+    <Text style={estilos.descricaoMateria}>
+      Programação e desenvolvimento
+    </Text>
+  </View>
+</Pressable>
+
+<Pressable
+  style={estilos.materia}
+  onPress={() =>
+    router.push({
+      pathname: '/materia/[nome]',
+      params: { nome: 'seguranca' },
+    })
+  }
+>
+  <Text style={estilos.icone}>🔐</Text>
+  <View>
+    <Text style={estilos.nomeMateria}>
+      Segurança da Informação
+    </Text>
+    <Text style={estilos.descricaoMateria}>
+      Proteção de dados e sistemas
+    </Text>
+  </View>
+</Pressable>
+
+<Pressable
+  style={estilos.materia}
+  onPress={() =>
+    router.push({
+      pathname: '/materia/[nome]',
+      params: { nome: 'gerais' },
+    })
+  }
+>
+  <Text style={estilos.icone}>📖</Text>
+  <View>
+    <Text style={estilos.nomeMateria}>
+      Conhecimentos Gerais
+    </Text>
+    <Text style={estilos.descricaoMateria}>
+      Conteúdos para revisar e praticar
+    </Text>
+  </View>
+</Pressable>
+
+      <Text style={estilos.rodape}>
+        Aprender um pouco todos os dias faz a diferença!
+      </Text>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
+const estilos = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f1f5f9',
+  },
+  cabecalho: {
+    backgroundColor: '#312e81',
+    paddingTop: 60,
+    paddingBottom: 35,
+    alignItems: 'center',
+  },
+  logo: {
+    color: '#ffffff',
+    fontSize: 30,
+    fontWeight: '800',
+    letterSpacing: 3,
+  },
+  subtitulo: {
+    color: '#c7d2fe',
+    fontSize: 15,
+    marginTop: 8,
+  },
+  boasVindas: {
+    padding: 22,
+  },
+  titulo: {
+    color: '#1e293b',
+    fontSize: 25,
+    fontWeight: '800',
+  },
+  descricao: {
+    color: '#64748b',
+    fontSize: 14,
+    marginTop: 8,
+  },
+  cartao: {
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
+    padding: 22,
+    borderRadius: 18,
+    elevation: 3,
+  },
+  tituloCartao: {
+    color: '#334155',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  numero: {
+    color: '#4f46e5',
+    fontSize: 42,
+    fontWeight: '800',
+    marginTop: 10,
+  },
+  tituloSecao: {
+    color: '#1e293b',
+    fontSize: 21,
+    fontWeight: '800',
+    marginHorizontal: 20,
+    marginTop: 28,
+    marginBottom: 12,
+  },
+  materia: {
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
+    marginBottom: 12,
+    padding: 18,
+    borderRadius: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  icone: {
+    fontSize: 30,
+    marginRight: 15,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  nomeMateria: {
+    color: '#1e293b',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  descricaoMateria: {
+    color: '#64748b',
+    fontSize: 12,
+    marginTop: 5,
+  },
+  botao: {
+    backgroundColor: '#4f46e5',
+    marginHorizontal: 20,
+    marginTop: 15,
+    padding: 17,
+    borderRadius: 14,
+    alignItems: 'center',
+  },
+  textoBotao: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  rodape: {
+    color: '#64748b',
+    textAlign: 'center',
+    margin: 25,
+    fontSize: 12,
   },
 });
+
